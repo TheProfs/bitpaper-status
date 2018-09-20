@@ -47,6 +47,12 @@ The *Known Issue* will also be showing in a list below the status indicators.
 When you're done fixing the error, just mark that issue as `"resolved": true`,
 and push to `master` branch.
 
+## Deployments
+
+Pushing to the `master` branch triggers a [Github Pages][gh-page-overview]
+deploy of this at `https://TheProfs.github.io/bitpaper-status` which is CNAMED as
+https://status.bitpaper.io.
+
 
 ## Authors
 
@@ -56,3 +62,4 @@ and push to `master` branch.
 
 [nicholaswmin]: https://github.com/nicholaswmin
 [the-profs]: https://github.com/TheProfs
+[gh-page-overview]: https://pages.github.com/
