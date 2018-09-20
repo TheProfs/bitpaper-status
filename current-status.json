@@ -18,7 +18,7 @@
     {
       "resolved": true,
       "title": "Slow loading times",
-      "description": "Due to a server outage, Papers loaded slower than usual",
+      "description": "Due to a server outage, Papers loaded slower than usual.",
       "timestamp": 1537203600000,
       "stepsTakenThisFar": [
         {
