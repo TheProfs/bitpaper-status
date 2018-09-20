@@ -41,6 +41,8 @@
       }
 
       ul li {
+        font-size: 12px;
+        color: #888;
         margin: 8px 0;
       }
     </style>
@@ -71,11 +73,7 @@
             is="dom-repeat"
             items="[[item.stepsTakenThisFar]]"
             as="innerItem">
-            <li>
-              <span class="time-label">
-                [[_toHumanReadableDatetime(innerItem.timestamp)]]</span> -
-                [[innerItem.message]]
-            </li>
+            <li> [[innerItem.message]]</li>
           </template>
         </ul>
       </div>
