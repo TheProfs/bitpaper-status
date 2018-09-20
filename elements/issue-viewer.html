@@ -148,7 +148,7 @@
       },
 
       ready: function() {
-        window.issuesList = this
+        window.issuesViewer = this
 
         this._getAllIssuesWithComments(this.knownIssuesUrl)
           .then(issues => {
