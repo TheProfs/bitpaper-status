@@ -129,11 +129,13 @@
             this.set('issues', result.issues)
           })
 
-        timeout(
-          4000,
-          fetch('https://api.bitpaper.io', { mode: 'no-cors' })
-            .then(() => fetch('https://bitpaper.io', { mode: 'no-cors' }))
-        ).then(result => {
+        timeout(4000,fetch('https://api.bitpaper.io', {
+          mode: 'no-cors'
+        }))
+        .then(result => timeout(4000, fetch('https://bitpaper.io', {
+          mode: 'no-cors'
+        })))
+        .then(result => {
           this.set('hasAutoIssues', false)
           this.set('autoLoading', false)
         }).catch(err => {
