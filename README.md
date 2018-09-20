@@ -8,7 +8,7 @@ Bitpaper's Status Pages.
 
 ```bash
 # git clone this, cd into the folder and...
-$ npm install && bower install
+$ bower install
 ```
 
 ## Run
