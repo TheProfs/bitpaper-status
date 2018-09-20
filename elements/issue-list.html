@@ -1,0 +1,159 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="status-item.html">
+<link rel="import" href="issue-item.html">
+
+<dom-module id="issue-list">
+  <template>
+    <style>
+      :host {
+        display: block;
+        font-family: sans-serif;
+        color: #555;
+      }
+
+      a {
+        color: #009688;
+      }
+
+      .status-container {
+        text-align: center;
+        padding: 32px 0;
+      }
+
+      .status-overall {
+        margin-top: 2em;
+        text-align: center;
+        font-size: 14px;
+      }
+
+      status-item {
+        display: inline-block;
+        max-width: 300px;
+        font-size: 12px;
+      }
+
+      issue-item {
+        display: block;
+        font-size: 14px;
+      }
+    </style>
+
+    <div hidden$="[[autoLoading]]">
+      <div class="status-overall" hidden$="[[hasIssues]]">
+        <h3>  Bitpaper seems to be running normally. </h3>
+        <p>
+          If you believe you found a bug, or you cannot use BitPaper
+          <a href="mailto:hello@bitpaper.io">drop us an email.</a>
+        </p>
+      </div>
+
+      <div class="status-overall" hidden$="[[!hasIssues]]">
+        <h3> Yikes, BitPaper is experiencing some issues. </h3>
+        <p>
+          We are working to resolve the issue. Check this status page
+          in 10 minutes for more information.
+        </p>
+      </div>
+    </div>
+
+    <div class="status-container">
+      <status-item
+        title="Automated Health Check"
+        loading="[[autoLoading]]"
+        has-issues="[[hasAutoIssues]]"
+        has-no-issues-text="All systems operational.">
+      </status-item>
+      <status-item
+        title="Known Issues"
+        has-issues="[[hasKnownIssues]]"
+        has-no-issues-text="We are not aware of any issues.">
+      </status-item>
+    </div>
+
+    <h3> Previous Issues </h3>
+
+    <template is="dom-repeat" items="[[issues]]">
+      <issue-item item="[[item]]"></issue-item>
+    </template>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'issue-list',
+
+      properties: {
+        issues: {
+          type: Array,
+          value: function() {
+            return [  ]
+          }
+        },
+
+        autoLoading: {
+          type: Boolean,
+          value: true
+        },
+
+        hasAutoIssues: {
+          type: Boolean,
+          value: true
+        },
+
+        hasKnownIssues: {
+          type: Boolean,
+          computed: '_hasKnownIssues(issues.*)'
+        },
+
+        hasIssues: {
+          type: Boolean,
+          computed: '_hasIssues(hasAutoIssues, hasKnownIssues)'
+        }
+      },
+
+      ready: function() {
+        window.issuesList = this
+
+        function timeout(ms, promise) {
+          return new Promise(function(resolve, reject) {
+            setTimeout(function() {
+              reject(new Error('timeout'))
+            }, ms)
+            promise.then(resolve, reject)
+          })
+        }
+
+        fetch('current-status.json')
+          .then(res => res.json())
+          .then(result => {
+            this.set('issues', result.issues)
+          })
+
+        timeout(
+          4000,
+          fetch('https://api.bitpaper.io', { mode: 'no-cors' })
+            .then(() => fetch('https://bitpaper.io', { mode: 'no-cors' }))
+        ).then(result => {
+          this.set('hasAutoIssues', false)
+          this.set('autoLoading', false)
+        }).catch(err => {
+          this.set('hasAutoIssues', true)
+          this.set('autoLoading', false)
+          console.error(err)
+        })
+      },
+
+      _toDate: function(timestamp) {
+        return new Date(timestamp).toUTCString()
+      },
+
+      _hasKnownIssues: function() {
+        return this.issues.some(issue => !issue.resolved)
+      },
+
+      _hasIssues: function(hasAutoIssues, hasKnownIssues) {
+        return hasAutoIssues || hasKnownIssues
+      }
+    })
+  </script>
+</dom-module>

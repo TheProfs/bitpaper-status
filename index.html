@@ -1,8 +1,38 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link rel="import" href="elements/issue-list.html">
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+
+    <title>BitPaper Status</title>
+
+    <style>
+      * {
+        font-family: 'Lato', sans-serif;
+      }
+
+      html,
+      body {
+        padding: 1em;
+        background: #fafafa;
+      }
+
+      .logo-container {
+        text-align: center;
+        color: #777;
+      }
+    </style>
+  </head>
   <body>
-
-  <h1>Hello World</h1>
-
+    <div class="logo-container">
+      <img src="https://bitpaper.io/app/pages/lobby/images/logo.png" width="50" height="47">
+      <div>
+        <label class="logo-label">BitPaper</label>
+      </div>
+    </div>
+    <issue-list></issue-list>
   </body>
 </html>

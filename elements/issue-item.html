@@ -1,0 +1,105 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+
+<dom-module id="issue-item">
+  <template>
+    <style>
+      paper-card {
+        display: block;
+        margin-bottom: 0.5em;
+      }
+
+      table {
+        border-spacing: 0;
+      }
+
+      table .right {
+        text-align: right;
+      }
+
+      .title-row td {
+        border-bottom: 1px solid #ddd;
+      }
+
+      .status-label {
+        display: inline-block;
+        padding: 6px 8px;
+        border: 1px solid;
+      }
+
+      .status-label {
+        color: #FF9800;
+      }
+
+      .status-label[resolved] {
+        color: #4CAF50;
+      }
+
+      .time-label {
+        font-size: 10px;
+        color: #999;
+      }
+
+      ul li {
+        margin: 8px 0;
+      }
+    </style>
+
+    <paper-card resolved$="[[item.resolved]]">
+      <div class="card-content">
+        <table style="width:100%">
+          <tr class="title-row">
+            <td>
+              <span class="time-label">
+                [[_toHumanReadableDatetime(item.timestamp)]]
+              </span>
+              <h4>[[item.title]]</h4>
+            </td>
+            <td class="right">
+              <div class="status-label" resolved$="[[item.resolved]]">
+                <span hidden$="[[item.resolved]]">Pending</span>
+                <span hidden$="[[!item.resolved]]">Resolved</span>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <p>[[item.description]]</p>
+
+        <ul>
+          <template
+            is="dom-repeat"
+            items="[[item.stepsTakenThisFar]]"
+            as="innerItem">
+            <li>
+              <span class="time-label">
+                [[_toHumanReadableDatetime(innerItem.timestamp)]]</span> -
+                [[innerItem.message]]
+            </li>
+          </template>
+        </ul>
+      </div>
+    </paper-card>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'issue-item',
+
+      properties: {
+        item: {
+          type: Object
+        }
+      },
+
+      ready: function() {
+        window.issueItem = this
+      },
+
+      _toHumanReadableDatetime: function(timestamp) {
+        return new Date(timestamp).toUTCString()
+      }
+    })
+  </script>
+</dom-module>

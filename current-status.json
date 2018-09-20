@@ -1,0 +1,37 @@
+{
+  "issues": [
+    {
+      "title": "Intermittent Connection Issues",
+      "description": "Due to a server outage, the whiteboard was inaccessible.",
+      "stepsTakenThisFar": [
+        {
+          "timestamp": 1537436553260,
+          "message": "Issue has been fixed. Operations should be back to normal."
+        },
+        {
+          "timestamp": 1537336553260,
+          "message": "We identified the cause and we are working on a fix."
+        }
+      ],
+      "resolved": true,
+      "timestamp": 1537436553260
+    },
+
+    {
+      "title": "Slow loading times",
+      "description": "We identified a problem with slow-loading Papers.",
+      "stepsTakenThisFar": [
+        {
+          "timestamp": 1537436553260,
+          "message": "Issue has been fixed. Operations should be back to normal."
+        },
+        {
+          "timestamp": 1533436453260,
+          "message": "We identified the cause and we are working on a fix."
+        }
+      ],
+      "resolved": true,
+      "timestamp": 1537436553260
+    }
+  ]
+}
