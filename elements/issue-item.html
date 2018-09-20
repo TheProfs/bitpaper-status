@@ -47,33 +47,33 @@
       }
     </style>
 
-    <paper-card resolved$="[[item.resolved]]">
+    <paper-card>
       <div class="card-content">
         <table style="width:100%">
           <tr class="title-row">
             <td>
               <span class="time-label">
-                [[_toHumanReadableDatetime(item.timestamp)]]
+                [[_toHumanReadableDatetime(item.created_at)]]
               </span>
               <h4>[[item.title]]</h4>
             </td>
             <td class="right">
-              <div class="status-label" resolved$="[[item.resolved]]">
-                <span hidden$="[[item.resolved]]">Pending</span>
-                <span hidden$="[[!item.resolved]]">Resolved</span>
+              <div class="status-label" resolved$="[[_isClosed(item.state)]]">
+                <span hidden$="[[_isClosed(item.state)]]">Pending</span>
+                <span hidden$="[[_isOpen(item.state)]]">Resolved</span>
               </div>
             </td>
           </tr>
         </table>
 
-        <p>[[item.description]]</p>
+        <p>[[item.body]]</p>
 
         <ul>
           <template
             is="dom-repeat"
-            items="[[item.stepsTakenThisFar]]"
+            items="[[item.comments]]"
             as="innerItem">
-            <li> [[innerItem.message]]</li>
+            <li> [[innerItem.body]]</li>
           </template>
         </ul>
       </div>
@@ -95,8 +95,16 @@
         window.issueItem = this
       },
 
-      _toHumanReadableDatetime: function(timestamp) {
-        return new Date(timestamp).toUTCString()
+      _toHumanReadableDatetime: function(date) {
+        return new Date(date).toUTCString()
+      },
+
+      _isOpen: function(state) {
+        return state === 'open'
+      },
+
+      _isClosed: function(state) {
+        return state === 'closed'
       }
     })
   </script>

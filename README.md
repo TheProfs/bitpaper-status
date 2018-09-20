@@ -1,5 +1,8 @@
 # bitpaper-status
-Bitpaper Status Pages
+
+Bitpaper's Status Pages.
+
+**Important:** Keep this repository public.
 
 ## Installation
 
@@ -10,56 +13,57 @@ $ npm install && bower install
 
 ## Run
 
-Just visit `index.html`.
+Just serve the root directory with the server of your choice.
 
 ## How it works
 
-The page:
+When loaded, the page runs some checks to see if BitPaper is fit for use.
 
-- Sends `GET` calls to BitPaper's main site and API. This is called the
-  *Auto Health Check*.
-- Checks a `json` file for any manually added *Known Issues*,
-  marked as unresolved.
+The checks are:
 
-If *Auto Health Check* calls fail, or there is a *Known Issue* marked
-as *unresolved*, the status is considered to be failing, otherwise it's marked
-as OK.
+- Does [BAPI][bapi] and [Bitpaper UI][bui] respond to `HEAD` requests, promptly?
+- Are all Issues in this repository's [Issue List][bp-status-issues] **closed**?
 
-### *Auto Health* Check
+If any of the above fail then the status is considered to be
+failing, otherwise it's marked as OK.
 
-This page will automatically try to fetch https://api.bitpaper.io and
-https://bitpaper.io, with a timeout.
+### Previous Issues
 
-If any of those `GET` calls fail, the automated *Health Check* is considered
-failing and the *Health Check* indicator turns orange.
+The status page also displays a list of all existing Issues and their comments.
 
-### Manually adding a *Known Issue*
+#### Note
 
-This server has a `current-status.json` file in the root directory. Add
-issues in the `issues` array and mark them as `"resolved": false` and push
-to `master` branch.
-
-This causes the *Known Issues* indicator to turn orange, to indicate that
-there is a *Known Issue* and that BitPaper probably won't be running normally.
-
-The *Known Issue* will also be showing in a list below the status indicators.
-
-When you're done fixing the error, just mark that issue as `"resolved": true`,
-and push to `master` branch.
+- Don't add profanities or unprofessional language in the comments. They
+  will appear in the public status page.
+- You should mark an Issue as closed after you resolve it so it appears as
+resolved in the status page.
 
 ## Deployments
 
 Pushing to the `master` branch triggers a [Github Pages][gh-page-overview]
-deploy of this at `https://TheProfs.github.io/bitpaper-status` which is CNAMED as
-https://status.bitpaper.io.
+deploy of this at `https://TheProfs.github.io/bitpaper-status` which is
+CNAMED as https://status.bitpaper.io.
 
+## Configuration
+
+You can directly set the Github Issues URL and the service check URL's
+on the `<issue-viewer>` element in `index.html`.
+
+```html
+<issue-viewer
+  known-issues-url="https://api.github.com/repos/TheProfs/bitpaper-status/issues?state=all"
+  service-check-urls="https://api.bitpaper.io, https://bitpaper.io">
+</issue-viewer>
+```
 
 ## Authors
 
 - Nicholas Kyriakides, [@nicholaswmin][nicholaswmin]
 - [TheProfs][the-profs] (Owners)
 
-
+[bui]: https://github.com/TheProfs/bitpaper
+[bapi]: https://github.com/TheProfs/bitpaper-api
+[bp-status-issues]: https://github.com/TheProfs/bitpaper-status/issues
 [nicholaswmin]: https://github.com/nicholaswmin
 [the-profs]: https://github.com/TheProfs
 [gh-page-overview]: https://pages.github.com/

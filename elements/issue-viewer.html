@@ -2,7 +2,7 @@
 <link rel="import" href="status-item.html">
 <link rel="import" href="issue-item.html">
 
-<dom-module id="issue-list">
+<dom-module id="issue-viewer">
   <template>
     <style>
       :host {
@@ -32,13 +32,23 @@
         font-size: 12px;
       }
 
+      .error-container,
+      .spinner-container {
+        padding: 8px;
+        text-align: center;
+      }
+
+      .error-container {
+        color: #d50000;
+      }
+
       issue-item {
         display: block;
         font-size: 14px;
       }
     </style>
 
-    <div hidden$="[[autoLoading]]">
+    <div hidden$="[[_isLoading(autoLoading, knownIssuesLoading)]]">
       <div class="status-overall" hidden$="[[hasIssues]]">
         <h3>  Bitpaper seems to be running normally. </h3>
         <p>
@@ -72,6 +82,14 @@
 
     <h3> Previous Issues </h3>
 
+    <div class="spinner-container" hidden$="[[!knownIssuesLoading]]">
+      <paper-spinner-lite active></paper-spinner>
+    </div>
+
+    <div class="error-container" hidden$="[[!lastKnownIssuesFetchError]]">
+      An error occured while fetching Known Issues.
+    </div>
+
     <template is="dom-repeat" items="[[issues]]">
       <issue-item item="[[item]]"></issue-item>
     </template>
@@ -80,9 +98,17 @@
   <script>
     Polymer({
 
-      is: 'issue-list',
+      is: 'issue-viewer',
 
       properties: {
+        knownIssuesUrl: {
+          type: String
+        },
+
+        serviceCheckUrls: {
+          type: String
+        },
+
         issues: {
           type: Array,
           value: function() {
@@ -93,6 +119,16 @@
         autoLoading: {
           type: Boolean,
           value: true
+        },
+
+        knownIssuesLoading: {
+          type: Boolean,
+          value: true
+        },
+
+        lastKnownIssuesFetchError: {
+          type: Boolean,
+          value: false
         },
 
         hasAutoIssues: {
@@ -114,6 +150,29 @@
       ready: function() {
         window.issuesList = this
 
+        this._getAllIssuesWithComments(this.knownIssuesUrl)
+          .then(issues => {
+            this.set('issues', issues)
+            this.set('knownIssuesLoading', false)
+          })
+          .catch(err => {
+            this.set('knownIssuesLoading', false)
+            this.set('lastKnownIssuesFetchError', true)
+            console.error(err)
+          })
+
+        this._checkServices(this.serviceCheckUrls.split(','))
+          .then(result => {
+            this.set('hasAutoIssues', false)
+            this.set('autoLoading', false)
+          }).catch(err => {
+            this.set('hasAutoIssues', true)
+            this.set('autoLoading', false)
+            console.error(err)
+          })
+      },
+
+      _checkServices: function(urls) {
         function timeout(ms, promise) {
           return new Promise(function(resolve, reject) {
             setTimeout(function() {
@@ -123,26 +182,37 @@
           })
         }
 
-        fetch('current-status.json')
-          .then(res => res.json())
-          .then(result => {
-            this.set('issues', result.issues)
-          })
+        return Promise.all(urls.map(url => timeout(4000, fetch(url, {
+          method: 'HEAD',
+          mode: 'no-cors'
+        }))))
+      },
 
-        timeout(4000,fetch('https://api.bitpaper.io', {
-          mode: 'no-cors'
-        }))
-        .then(result => timeout(4000, fetch('https://bitpaper.io', {
-          mode: 'no-cors'
-        })))
-        .then(result => {
-          this.set('hasAutoIssues', false)
-          this.set('autoLoading', false)
-        }).catch(err => {
-          this.set('hasAutoIssues', true)
-          this.set('autoLoading', false)
-          console.error(err)
-        })
+      _getAllIssuesWithComments: function(url) {
+        return fetch(url)
+          .then(res => res.json())
+          .then(issues => {
+            return Promise.all(issues
+              .map(issue => fetch(issue.comments_url)
+              .then(res => res.json()))
+            )
+            .then(comments =>
+              comments.reduce((arr, comments) => arr.concat(comments), [])
+            )
+            .then(comments => ({ issues, comments }))
+            .then(({ issues, comments }) => {
+              return issues.map(issue => {
+                issue.comments = comments.filter(comment =>
+                  comment.issue_url === issue.url)
+
+                return issue
+              })
+            })
+          })
+      },
+
+      _isLoading: function(a, b) {
+        return a && b
       },
 
       _toDate: function(timestamp) {
@@ -150,7 +220,7 @@
       },
 
       _hasKnownIssues: function() {
-        return this.issues.some(issue => !issue.resolved)
+        return this.issues.some(issue => issue.state === 'open')
       },
 
       _hasIssues: function(hasAutoIssues, hasKnownIssues) {
