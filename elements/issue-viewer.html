@@ -208,6 +208,7 @@
                 return issue
               })
             })
+            .then(issues => issues.filter(issue => !issue.pull_request))
           })
       },
 
