@@ -21,7 +21,8 @@ When loaded, the page runs some checks to see if BitPaper is fit for use.
 
 The checks are:
 
-- Does [BAPI][bapi] and [Bitpaper UI][bui] respond to `HEAD` requests, promptly?
+- Does [BAPI][bapi] `/status` endpoint and [Bitpaper UI][bui] respond to `HEAD`
+  requests, promptly?
 - Are all Issues in this repository's [Issue List][bp-status-issues] **closed**?
 
 If any of the above fail then the status is considered to be
@@ -52,7 +53,7 @@ on the `<issue-viewer>` element in `index.html`.
 ```html
 <issue-viewer
   known-issues-url="https://api.github.com/repos/TheProfs/bitpaper-status/issues?state=all"
-  service-check-urls="https://api.bitpaper.io, https://bitpaper.io">
+  service-check-urls="https://api.bitpaper.io/api/v1/status, https://bitpaper.io">
 </issue-viewer>
 ```
 
