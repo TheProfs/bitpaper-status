@@ -32,8 +32,29 @@
     <title>BitPaper Status</title>
 
     <style>
+      @font-face {
+        font-family: 'GT-Walsheim-Pro';
+        src: url('/fonts/GT-Walsheim-Pro-Black.ttf') format('truetype');
+        font-weight: 800;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: 'GT-Walsheim-Pro';
+        src: url('/fonts/GT-Walsheim-Pro-Bold.ttf') format('truetype');
+        font-weight: 600;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: 'GT-Walsheim-Pro';
+        src: url('/fonts/GT-Walsheim-Pro-Regular.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+      }
+
       * {
-        font-family: 'Lato', sans-serif;
+        font-family: 'GT-Walsheim-Pro', sans-serif;
       }
 
       html,
@@ -46,6 +67,10 @@
         text-align: center;
         color: #777;
         margin-bottom: 40px;
+      }
+
+      h1,h2,h3,h4,h5,h6 {
+        font-weight: normal;
       }
     </style>
   </head>
