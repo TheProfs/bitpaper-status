@@ -1,0 +1,27 @@
+{
+  "name": "bitpaper-status",
+  "version": "0.1.0",
+  "description": "Bitpaper's status pages",
+  "main": "server/app.js",
+  "scripts": {
+    "start": "node server/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheProfs/bitpaper-status.git"
+  },
+  "keywords": [
+    "bitpaper",
+    "status"
+  ],
+  "author": "Bitpaper",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TheProfs/bitpaper-status/issues"
+  },
+  "homepage": "https://github.com/TheProfs/bitpaper-status#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
