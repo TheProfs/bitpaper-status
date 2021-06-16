@@ -34,16 +34,13 @@ The status page also displays a list of all existing Issues and their comments.
 
 #### Note
 
-- Don't add profanities or unprofessional language in the comments. They
-  will appear in the public status page.
 - You should mark an Issue as closed after you resolve it so it appears as
 resolved in the status page.
 
 ## Deployments
 
-Pushing to the `master` branch triggers a [Github Pages][gh-page-overview]
-deploy of this at `https://TheProfs.github.io/bitpaper-status` which is
-CNAMED as https://status.bitpaper.io.
+Pushing to the `master` branch triggers a deployment to
+https://status.bitpaper.io.
 
 ## Configuration
 
